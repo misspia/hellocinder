@@ -10,9 +10,10 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{74614828-D260-4CA2-8EE6-992BD1014848}</ProjectGuid>
+    <ProjectGuid>{02BF531D-4767-45AF-AF94-E367F020EA0C}</ProjectGuid>
     <RootNamespace>hellocinder</RootNamespace>
     <Keyword>Win32Proj</Keyword>
+    <WindowsTargetPlatformVersion>10.0.16299.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">

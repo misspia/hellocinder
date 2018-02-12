@@ -1,0 +1,20 @@
+
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2015
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "hellocinder", "hellocinder.vcxproj", "{74614828-D260-4CA2-8EE6-992BD1014848}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{74614828-D260-4CA2-8EE6-992BD1014848}.Debug|Win32.ActiveCfg = Debug|Win32
+		{74614828-D260-4CA2-8EE6-992BD1014848}.Debug|Win32.Build.0 = Debug|Win32
+		{74614828-D260-4CA2-8EE6-992BD1014848}.Release|Win32.ActiveCfg = Release|Win32
+		{74614828-D260-4CA2-8EE6-992BD1014848}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

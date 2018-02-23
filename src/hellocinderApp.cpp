@@ -12,11 +12,53 @@ class hellocinderApp : public App {
 	void mouseDown( MouseEvent event ) override;
 	void update() override;
 	void draw() override;
+
+	void batches();
+	void texShaderWheel();
+
+	CameraPersp mCam;
+	gl::BatchRef mBox;
+	gl::BatchRef mRect;
+	gl::GlslProgRef mGlsl;
+
 };
 
 void hellocinderApp::setup()
 {
 	setWindowSize({ 900,600 });
+	
+	// Batches
+	//auto lambert = gl::ShaderDef().lambert().color();
+	//gl::GlslProgRef shader = gl::getStockShader(lambert);
+	//mBox = gl::Batch::create(geom::Cube(), shader);
+	//mCam.lookAt(vec3(3.0, 4.5, 4.5), vec3(0.0, 1.0, 0.0));
+	
+	// texShaderWheel
+	//auto img = loadImage(loadAsset("texture.jpg"));
+	mCam.lookAt(vec3(3, 2, 3), vec3(0));
+
+	mGlsl = gl::GlslProg::create(gl::GlslProg::Format()
+		.vertex(CI_GLSL(150,
+			uniform mat4	ciModelViewProjection;
+			in vec4			ciPosition;
+
+			void main(void) {
+				gl_Position = ciModelViewProjection * ciPosition;
+			}
+		))
+		.fragment(CI_GLSL(150,
+			uniform vec4	uColor;
+			out vec4		oColor;
+
+			void main(void) {
+				oColor = uColor;
+			}
+		)));
+		
+	mRect = gl::Batch::create(geom::Plane(), mGlsl);
+
+	gl::enableDepthWrite;
+	gl::enableDepthRead;
 }
 
 void hellocinderApp::mouseDown( MouseEvent event )
@@ -90,13 +132,63 @@ void test3D() {
 	}
 }
 
+void hellocinderApp::batches() {
+	gl::enableDepthRead();
+	gl::enableDepthWrite();
+	gl::setMatrices(mCam);
+
+	int numSpheres = 64;
+	float maxAngle = M_PI * 7.0;
+	float spiralRadius = 1.0;
+	float height = 2.0;
+	float boxSize = 0.05f;
+	float anim = getElapsedFrames() / 30.0f;
+
+	for (int s = 0; s < numSpheres; s++) {
+		float rel = s / (float)numSpheres;
+		float angle = rel * maxAngle;
+		float y = fabs(cos(rel * M_PI + anim)) * height;
+		float r = rel * spiralRadius;
+		vec3 offset(r * cos(angle), y / 2, r *sin(angle));
+
+		gl::pushModelMatrix();
+		gl::translate(offset);
+		gl::scale(vec3(boxSize, y, boxSize));
+		gl::color(Color(CM_HSV, rel, 1, 1));
+		mBox->draw();
+		gl::popModelMatrix();
+	}
+}
+
+void hellocinderApp::texShaderWheel() {
+	gl::clear(Color(0.2f, 0.2f, 0.2f));
+	gl::setMatrices(mCam);
+
+	const int NUM_PLANES = 30;
+	for (int p = 0; p < NUM_PLANES; p++) {
+		float hue = p / (float)NUM_PLANES;
+		ColorAf color(CM_HSV, hue, 1, 1, 1);
+		mGlsl->uniform("uColor", color);
+
+		gl::ScopedModelMatrix scpMtx;
+		float angle = M_PI * p / (float)NUM_PLANES;
+		gl::rotate(angleAxis(angle, vec3(1, 0, 0)));
+		mRect->draw();
+	}
+}
+
+
 void hellocinderApp::draw()
 {
 	gl::clear();
-	//testTransform();
-	test3D();
 	
+	//testTransform();
+	//test3D();
+	//batches();
+	texShaderWheel();
 
+
+	
 }
 
 CINDER_APP( hellocinderApp, RendererGl )
